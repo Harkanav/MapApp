@@ -3,7 +3,8 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
-import MapScreen from './screens/MapScreen';
+// import MapScreen from './screens/MapScreen';
+import MapCompleteScreen from '.';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 // export type RootStackParamList = {
@@ -11,7 +12,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 //   MapScreen: undefined;
 // };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
@@ -22,8 +23,8 @@ const App = () => {
           // seecrnOptions={{headerShown: false}}
         >
           <Stack.Screen
-            name="MapScreen"
-            component={MapScreen}
+            name="MapCompleteScreen"
+            component={MapCompleteScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

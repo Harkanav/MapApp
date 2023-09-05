@@ -1,11 +1,11 @@
-type RootStackParamList = {
-  MapScreen: undefined;
-};
+// type RootStackParamList = {
+//   AreaCard: {item: areaDetails};
+// };
 
-interface onPressCoordinates {
+type onPressCoordinates = {
   latitude: number;
   longitude: number;
-}
+};
 
 interface areaDetails {
   name: string; // Unique

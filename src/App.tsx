@@ -1,33 +1,28 @@
-import {KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, StatusBar, View} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import 'react-native-gesture-handler';
-// import MapScreen from './screens/MapScreen';
-import MapCompleteScreen from '.';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {AppStack} from './navigation/AppStack';
 
-// export type RootStackParamList = {
-//   PolygonPage: undefined;
-//   MapScreen: undefined;
-// };
+export type RootStackParamList = {
+  MapScreen: undefined;
+};
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#FFF"
+        animated={true}
+      />
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="MapScreen"
-          // seecrnOptions={{headerShown: false}}
-        >
-          <Stack.Screen
-            name="MapCompleteScreen"
-            component={MapCompleteScreen}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
+        {/* ---------------------- All the screens are in AppStack  */}
+        <AppStack />
+        {/* -------------------------------------------------- */}
       </NavigationContainer>
     </GestureHandlerRootView>
   );

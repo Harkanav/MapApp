@@ -6,13 +6,15 @@ import {
   Modal,
   Dimensions,
   Alert,
+  Platform,
 } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {useMapContext} from '../MapContext';
 import {TextInput} from 'react-native-gesture-handler';
 import {computeArea, LatLng} from 'spherical-geometry-js/src/index';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const {width} = Dimensions.get('window');
 
@@ -22,18 +24,24 @@ const AreaModal = () => {
     areaName,
     setAreaName,
     setShowNameModal,
-    editName,
     allAreas,
     setAllAreas,
     onPressCoordinates,
     setOnPressCoordinates,
     setDrawPolygon,
-    oldName,
-    bottomSheetModalRef,
+    setAreaToDisplay,
+    areaToDisplay,
   } = useMapContext();
+
+  const kbRef = useRef<any>();
+  // const scrollToInput = (reactNode: any) => {
+  //   // Add a 'scroll' ref to your ScrollView
+  //   kbRef.current.scrollToFocusedInput(reactNode);
+  // };
 
   // -------------------------------- return true or false if a name is found.
   // -------------------------------- handleNameCheck function is also used in handleSaveArea.
+
   const handleNameCheck = (name: string): boolean => {
     const nameExists = allAreas.findIndex(area => area.name === name.trim());
 
@@ -82,9 +90,24 @@ const AreaModal = () => {
         },
         ...allAreas,
       ]);
+
+      setAreaToDisplay([
+        {
+          name: areaName,
+          coordinates: onPressCoordinates,
+          totalArea: parseFloat(getArea().toFixed(2)),
+        },
+        ...areaToDisplay,
+      ]);
+
       Alert.alert('Saved!', "'" + areaName + "' is suceessfully saved.", [
         {text: 'OK'},
       ]);
+
+      setOnPressCoordinates([]);
+      setAreaName('');
+      setDrawPolygon(false);
+      setShowNameModal(false);
 
       await AsyncStorage.setItem(
         'allAreas',
@@ -97,83 +120,76 @@ const AreaModal = () => {
           ...allAreas,
         ]),
       );
-
-      setAreaName('');
-      setOnPressCoordinates([]);
-      setDrawPolygon(false);
-      setShowNameModal(false);
     }
   };
 
-  // --------------------------------------------------- Edit Name
-  const handleUpdateName = async () => {
-    let allAreasDetails = allAreas.splice(0);
-    let index = 0;
-    for (let i = 0; i < allAreasDetails?.length; i++) {
-      const obj = allAreasDetails[i];
-      console.log(obj.name + ' ' + oldName, 223);
-      if (obj.name == oldName) {
-        index = i;
-        break;
-      }
-    }
-    // console.log(index, 228);
-    allAreasDetails[index].name = areaName;
-    setAllAreas(allAreasDetails);
-    await AsyncStorage.setItem('allAreas', JSON.stringify(allAreasDetails));
-    setShowNameModal(false);
-    bottomSheetModalRef.current?.close();
-    // setOpenBottomSheet(false);
-    Alert.alert('Updated!', 'The name is suceessfully updated.', [
-      {text: 'OK'},
-    ]);
-    // setClearAllPolygons(true);
-    // setAllAreas();
-  };
+  // console.log('show modal');
 
   return (
     <Modal visible={showNameModal} animationType="fade" transparent={true}>
       <SafeAreaView style={[styles.saveNameModal, {}]}>
-        <View style={styles.saveNamePrompt}>
-          <Text style={styles.saveNamePromptTitle}>Name</Text>
-          <Text style={styles.saveNamePromptDesc}>
-            How do you call it? (The name should be different from the existing
-            one. And, it should contain atleast 4 character.)
-          </Text>
-          <TextInput
-            maxLength={15}
-            value={areaName}
-            clearButtonMode="always" //only for iOS
-            onChangeText={setAreaName}
-            keyboardType="ascii-capable"
-            placeholder="Name"
-            style={styles.areaName}
-          />
-          <View style={styles.saveModalButtons}>
-            <Button
-              style={[
-                styles.saveModalBtn,
-                {
-                  borderColor: '#c1c1c1',
-                },
-              ]}
-              mode="outlined"
-              textColor="#007ab8"
-              onPress={() => setShowNameModal(false)}>
-              Cancel
-            </Button>
-            <Button
-              style={styles.saveModalBtn}
-              mode="contained"
-              buttonColor="#007ab8"
-              disabled={handleNameCheck(areaName)}
-              onPress={() => {
-                editName ? handleUpdateName() : handleSaveArea();
-              }}>
-              {editName ? 'Update' : 'Save'}
-            </Button>
+        <KeyboardAwareScrollView
+          // innerRef={ref => console.log(ref)}
+          ref={kbRef}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          enableAutomaticScroll
+          contentContainerStyle={{
+            position: 'relative',
+            flex: 1,
+            justifyContent: 'center',
+          }}
+          // onKeyboardWillShow={(frames: Object) => {
+          //   // console.log('Keyboard event', frames);
+          // }}
+        >
+          <View style={styles.saveNamePrompt}>
+            <Text style={styles.saveNamePromptTitle}>Name</Text>
+            <Text style={styles.saveNamePromptDesc}>
+              How do you call it? (The name should be different from the
+              existing one. And, it should contain atleast 4 character.)
+            </Text>
+            <TextInput
+              maxLength={15}
+              value={areaName}
+              clearButtonMode="always" //only for iOS
+              onChangeText={setAreaName}
+              keyboardType="ascii-capable"
+              placeholder="Name"
+              style={styles.areaName}
+              // onFocus={event => {
+              //   // kbRef.current.scrollToFocusedInput(event.target);
+              //   kbRef.current.scrollToPosition(0, 100);
+              //   console.log(kbRef.current.scrollToPosition(0, 100));
+              // }}
+              // onFocus={() => console.log(kbRef)}
+            />
+            <View style={styles.saveModalButtons}>
+              <Button
+                style={[
+                  styles.saveModalBtn,
+                  {
+                    borderColor: '#c1c1c1',
+                  },
+                ]}
+                mode="outlined"
+                textColor="#007ab8"
+                onPress={() => setShowNameModal(false)}>
+                Cancel
+              </Button>
+              <Button
+                style={styles.saveModalBtn}
+                mode="contained"
+                buttonColor="#007ab8"
+                disabled={handleNameCheck(areaName)}
+                onPress={() => {
+                  handleSaveArea();
+                }}>
+                Save
+              </Button>
+            </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Modal>
   );
@@ -183,14 +199,16 @@ export default AreaModal;
 
 const styles = StyleSheet.create({
   saveNameModal: {
+    zIndex: 5,
     backgroundColor: 'rgba(0, 0, 0, 0.41)',
     height: '100%',
     width: '100%',
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
+    // justifyContent: 'center',
   },
   saveNamePrompt: {
-    top: 100,
+    // top: 100,
     width: (width * 90) / 100,
     backgroundColor: '#eaeaea',
     borderRadius: 15,

@@ -13,20 +13,19 @@ const PolygonsToDisplay = () => {
             coordinates={area.coordinates}
             // Setting random color of the polygon.
             fillColor={'#2f95fe5b'}
-            strokeWidth={2}></Polygon>
-          <Marker coordinate={centerCoordOfPolygon(area.coordinates)}>
+            strokeWidth={0.5}></Polygon>
+          <Marker
+            coordinate={centerCoordOfPolygon(area.coordinates)}
+            anchor={{x: 0.5, y: 0.5}}>
             <View
               style={{
-                shadowOffset: {width: 0, height: 0},
-                shadowOpacity: 1,
-                shadowRadius: 5,
-                backgroundColor: '#333333',
+                backgroundColor: 'rgba(255,255,255,0.6)',
                 borderRadius: 10,
                 padding: 4,
               }}>
               <Text
                 style={{
-                  color: '#ffffff',
+                  color: '#333',
                   fontSize: 20,
                 }}>
                 {' ' + area.name + ' '}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {MapContextProvider} from './MapContext';
-import MapScreen from './screens/MapScreen';
+import MapScreen from './MapScreen';
 
 const MapCompleteScreen = () => {
   return (

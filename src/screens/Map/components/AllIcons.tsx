@@ -18,6 +18,7 @@ const AllIcons = () => {
     setShowNameModal,
     setAreaName,
     allAreas,
+    setAddArea,
   } = useMapContext();
 
   return (
@@ -99,7 +100,9 @@ const AllIcons = () => {
             style={styles.styleButton}
             onPress={() => {
               setEditName(false);
-              setShowNameModal(true);
+              setAddArea(true);
+              // setShowNameModal(true);
+              setOpenBottomSheet(true);
               setAreaName('');
             }}
           />

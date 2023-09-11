@@ -20,15 +20,21 @@ const AreaList = () => {
     setDrawPolygon,
     editName,
     oldName,
+    addArea,
+    setAddArea,
+    setEditName,
   } = useMapContext();
   const {width: windowWidth} = useWindowDimensions();
-
   return (
     <Dialog
       visible={openBottomSheet}
-      onDismiss={() => setOpenBottomSheet(false)}
+      onDismiss={() => {
+        setOpenBottomSheet(false);
+        setAddArea(false);
+        setEditName(false);
+      }}
       width={windowWidth}
-      height="70%"
+      height="60%"
       bottom={true}
       overlayBackgroundColor="transparent"
       containerStyle={styles.dialogContainer}
@@ -45,46 +51,63 @@ const AreaList = () => {
             </Pressable>
           </View>
           <View style={[styles.dialogHeader, {width: windowWidth}]}>
-            <Text style={styles.dialogHeaderText}>Area List</Text>
-            <Pressable
-              style={styles.dialogAddButton}
-              onPress={() => {
-                setDrawPolygon(true);
-                setOpenBottomSheet(false);
-              }}>
-              <Icon name="plus" size={20} color="#fff" />
-              <Text style={styles.dialogAddButtonText}>Add</Text>
-            </Pressable>
+            {addArea || editName ? (
+              addArea ? (
+                <Text style={styles.dialogHeaderText}>Add Area</Text>
+              ) : (
+                <Text style={styles.dialogHeaderText}>Edit Name</Text>
+              )
+            ) : (
+              <>
+                <Text style={styles.dialogHeaderText}>Area List</Text>
+                <Pressable
+                  style={styles.dialogAddButton}
+                  onPress={() => {
+                    setDrawPolygon(true);
+                    setOpenBottomSheet(false);
+                  }}>
+                  <Icon name="plus" size={20} color="#fff" />
+                  <Text style={styles.dialogAddButtonText}>Add</Text>
+                </Pressable>
+              </>
+            )}
           </View>
         </View>
       )}>
-      <FlatList
-        data={allAreas}
-        keyExtractor={item => item.name}
-        ListEmptyComponent={
-          <View
-            style={{
-              padding: 10,
-            }}>
-            <Text style={styles.noSavedAreaText}>No Saved Area</Text>
-          </View>
-        }
-        renderItem={({item}) => (
-          <>
-            {editName ? (
-              oldName == item.name && (
-                <View style={{paddingVertical: 10, width: windowWidth}}>
+      {/* ----------------------------------- Add area  */}
+      {addArea ? (
+        <View style={{paddingTop: 10, width: windowWidth}}>
+          <AreaCard item={undefined} />
+        </View>
+      ) : (
+        <FlatList
+          data={allAreas}
+          keyExtractor={item => item.name}
+          ListEmptyComponent={
+            <View
+              style={{
+                padding: 10,
+              }}>
+              <Text style={styles.noSavedAreaText}>No Saved Area</Text>
+            </View>
+          }
+          renderItem={({item}) => (
+            <>
+              {editName ? (
+                oldName == item.name && (
+                  <View style={{padding: 10, width: windowWidth}}>
+                    <AreaCard item={item} />
+                  </View>
+                )
+              ) : (
+                <View style={{padding: 10, width: windowWidth}}>
                   <AreaCard item={item} />
                 </View>
-              )
-            ) : (
-              <View style={{paddingVertical: 10, width: windowWidth}}>
-                <AreaCard item={item} />
-              </View>
-            )}
-          </>
-        )}
-      />
+              )}
+            </>
+          )}
+        />
+      )}
     </Dialog>
   );
 };

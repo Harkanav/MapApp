@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		5B2CB823CC3A2296180BDC65 /* libPods-MapApp-MapAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDEC2B6C06156A5B4C732F2D /* libPods-MapApp-MapAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A934B68A2AAEF7B6007B5033 /* MapAppPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A934B6892AAEF7B6007B5033 /* MapAppPermissions.swift */; };
 		A94520782A98D570000EE063 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A94520652A98D570000EE063 /* Fontisto.ttf */; };
 		A94520792A98D570000EE063 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A94520662A98D570000EE063 /* Octicons.ttf */; };
 		A945207A2A98D570000EE063 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A94520672A98D570000EE063 /* Feather.ttf */; };
@@ -59,6 +60,8 @@
 		18A7839734A6BE6D136F9577 /* libPods-MapApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C0EAB0451138B683921EC25 /* Pods-MapApp-MapAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapApp-MapAppTests.release.xcconfig"; path = "Target Support Files/Pods-MapApp-MapAppTests/Pods-MapApp-MapAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MapApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A934B6882AAEF7B6007B5033 /* MapApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MapApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		A934B6892AAEF7B6007B5033 /* MapAppPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAppPermissions.swift; sourceTree = "<group>"; };
 		A94520652A98D570000EE063 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		A94520662A98D570000EE063 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		A94520672A98D570000EE063 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				A934B6892AAEF7B6007B5033 /* MapAppPermissions.swift */,
+				A934B6882AAEF7B6007B5033 /* MapApp-Bridging-Header.h */,
 			);
 			name = MapApp;
 			sourceTree = "<group>";
@@ -272,7 +277,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1430;
 					};
 				};
 			};
@@ -496,6 +501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A934B68A2AAEF7B6007B5033 /* MapAppPermissions.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -516,6 +522,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 09F082CFEA13C2E4053E7656 /* Pods-MapApp-MapAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -543,6 +550,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3C0EAB0451138B683921EC25 /* Pods-MapApp-MapAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = MapAppTests/Info.plist;
@@ -568,6 +576,7 @@
 			baseConfigurationReference = F5E8D42898067260CEFE6374 /* Pods-MapApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56L3B26DM4;
@@ -586,6 +595,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.--mapapp1-rfc1034identifier-";
 				PRODUCT_NAME = MapApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "MapApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -597,6 +607,7 @@
 			baseConfigurationReference = D9DDC9C3269083F4C837FD07 /* Pods-MapApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56L3B26DM4;
@@ -614,6 +625,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.--mapapp1-rfc1034identifier-";
 				PRODUCT_NAME = MapApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "MapApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

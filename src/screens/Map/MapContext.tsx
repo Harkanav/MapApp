@@ -17,6 +17,7 @@ const useMap = () => {
 
   const [areaToDisplay, setAreaToDisplay] = useState<areaDetails[] | []>([]);
   const [showNameModal, setShowNameModal] = useState<boolean>(false);
+  const [addArea, setAddArea] = useState<boolean>(false);
   const [areaName, setAreaName] = useState<string>('');
   const [showAllPolygons, setShowAllPolygons] = useState<Boolean>(false);
 
@@ -100,6 +101,8 @@ const useMap = () => {
     mapType,
     setMapType,
     wordToUppercase,
+    addArea,
+    setAddArea,
   };
 };
 

@@ -12,12 +12,10 @@ import MapView, {
   Polyline,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
-import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMapContext} from './MapContext';
 import AreaList from './components/AreaList';
-import AreaModal from './components/AreaModal';
 import AllIcons from './components/AllIcons';
 import PolygonsToDisplay from './components/PolygonsToDisplay';
 import MapBottomBar from './components/MapBottomBar';
@@ -71,11 +69,12 @@ const MapScreen = () => {
 
     let areaToDisplayTemporary = allAreas.slice();
     allAreas?.map(area => {
+      const centerlatlong = centerCoordOfPolygon(area.coordinates);
       if (
-        centerCoordOfPolygon(area.coordinates)?.latitude >= lat_min &&
-        centerCoordOfPolygon(area.coordinates)?.latitude <= lat_max &&
-        centerCoordOfPolygon(area.coordinates)?.longitude >= lng_min &&
-        centerCoordOfPolygon(area.coordinates)?.longitude <= lng_max
+        centerlatlong?.latitude >= lat_min &&
+        centerlatlong?.latitude <= lat_max &&
+        centerlatlong?.longitude >= lng_min &&
+        centerlatlong?.longitude <= lng_max
       ) {
         if (areaToDisplayTemporary.findIndex(a => a.name == area.name) < 0) {
           areaToDisplayTemporary.push(area);
@@ -102,8 +101,6 @@ const MapScreen = () => {
           justifyContent: 'flex-end',
           alignItems: 'center',
         }}>
-        {/* // ---------------------------------------------------- Modal */}
-        <AreaModal />
         {/* ---------------------------------------------------- Icons over map */}
         <AllIcons />
         {/* ---------------------------------------------------- MapView */}
@@ -133,7 +130,6 @@ const MapScreen = () => {
                 data.nativeEvent.coordinate,
               ]);
           }}>
-          <PolygonsToDisplay />
           {onPressCoordinates?.length > 0 && (
             <>
               {onPressCoordinates?.length > 1 &&
@@ -156,6 +152,9 @@ const MapScreen = () => {
               <View style={styles.markerCircle} />
             </Marker>
           ))}
+
+          {/* -------------- Display all polygons */}
+          <PolygonsToDisplay />
         </MapView>
         {/* ----------------------------------------------- Bottom Sheets */}
         <AreaList />
@@ -192,5 +191,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     borderStyle: 'dashed',
+    zIndex: 10,
   },
 });

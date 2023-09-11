@@ -59,7 +59,7 @@ const LayerTypeSelector = () => {
             style={{width: windowWidth, alignItems: 'center'}}
             key={index}
             onPress={() => {
-              setMapType(layer);
+              mapType != layer && setMapType(layer);
               setOpenLayerBottomSheet(false);
             }}>
             <View
@@ -68,7 +68,7 @@ const LayerTypeSelector = () => {
                 {
                   borderWidth: mapType == layer ? 1.5 : 1,
                   borderColor: mapType == layer ? 'green' : 'grey',
-                  width: windowWidth - 5 / 100,
+                  width: (windowWidth * 95) / 100,
                 },
               ]}>
               <Text

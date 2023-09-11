@@ -19,13 +19,15 @@ const PolygonsToDisplay = () => {
             anchor={{x: 0.5, y: 0.5}}>
             <View
               style={{
-                backgroundColor: 'rgba(255,255,255,0.6)',
+                backgroundColor: '#22963f8b',
+
+                // backgroundColor: 'rgba(255,255,255,0.6)',
                 borderRadius: 10,
                 padding: 4,
               }}>
               <Text
                 style={{
-                  color: '#333',
+                  color: 'white',
                   fontSize: 20,
                 }}>
                 {' ' + area.name + ' '}

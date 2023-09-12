@@ -4,13 +4,16 @@ import {
   Dimensions,
   useWindowDimensions,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import React, {useCallback, useMemo} from 'react';
 import {useMapContext} from '../MapContext';
 import AreaCard from './AreaCard';
 import {Dialog, Pressable, Text} from '../../../components/ApplicationUILib';
 // import {IconButton} from 'react-native-paper';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AreaCreateAndEditModal from './AreaCreateAndEditModal';
 
 const AreaList = () => {
   const {
@@ -23,15 +26,19 @@ const AreaList = () => {
     addArea,
     setAddArea,
     setEditName,
+    setAreaName,
+    setOldName,
   } = useMapContext();
-  const {width: windowWidth} = useWindowDimensions();
+  const {width: windowWidth, height: windowHeight} = useWindowDimensions();
   return (
     <Dialog
       visible={openBottomSheet}
       onDismiss={() => {
         setOpenBottomSheet(false);
-        setAddArea(false);
-        setEditName(false);
+        addArea && setAddArea(false);
+        editName && setEditName(false);
+        setAreaName('');
+        setOldName('');
       }}
       width={windowWidth}
       height="60%"
@@ -47,19 +54,53 @@ const AreaList = () => {
             <Pressable
               style={styles.dialofCloseBotton}
               onPress={() => setOpenBottomSheet(false)}>
-              <Icon name="chevron-down" size={13} color="#696969" />
+              <Icon name="chevron-down" size={13} color="gray" />
             </Pressable>
           </View>
+
+          {/* ---------------------- Heading and close button */}
+
           <View style={[styles.dialogHeader, {width: windowWidth}]}>
-            {addArea || editName ? (
-              addArea ? (
-                <Text style={styles.dialogHeaderText}>Add Area</Text>
+            <Text style={styles.dialogHeaderText}>
+              {addArea ? (
+                'Add Area'
+              ) : editName ? (
+                // ----------------------------------- Back button
+                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                  <Pressable
+                    onPress={() => {
+                      setAreaName('');
+                      setEditName(false);
+                      setOldName('');
+                    }}
+                    style={{paddingRight: 15}}>
+                    <MaterialIcon name="arrow-left" size={28} color="#333" />
+                  </Pressable>
+                  <Text style={styles.dialogHeaderText}>Edit Area Name</Text>
+                </View>
               ) : (
-                <Text style={styles.dialogHeaderText}>Edit Name</Text>
-              )
+                'Area List'
+              )}
+            </Text>
+            {addArea || editName ? (
+              <>
+                <Pressable
+                  onPress={() => {
+                    setAreaName('');
+                    addArea && setAddArea(false);
+                    editName && setEditName(false);
+                    setOpenBottomSheet(false);
+                  }}>
+                  <MaterialIcon
+                    style={{paddingHorizontal: 10}}
+                    name="close"
+                    size={28}
+                    color="#333"
+                  />
+                </Pressable>
+              </>
             ) : (
               <>
-                <Text style={styles.dialogHeaderText}>Area List</Text>
                 <Pressable
                   style={styles.dialogAddButton}
                   onPress={() => {
@@ -74,15 +115,16 @@ const AreaList = () => {
           </View>
         </View>
       )}>
-      {/* ----------------------------------- Add area  */}
-      {addArea ? (
-        <View style={{paddingTop: 10, width: windowWidth}}>
-          <AreaCard item={undefined} />
-        </View>
-      ) : (
+      {/* ----------------------------------- Bottom list content */}
+      {!addArea && !editName && (
         <FlatList
           data={allAreas}
-          keyExtractor={item => item.name}
+          keyExtractor={item => item.name + item.coordinates[0].latitude}
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+            paddingBottom: 30,
+            width: windowWidth,
+          }}
           ListEmptyComponent={
             <View
               style={{
@@ -93,21 +135,19 @@ const AreaList = () => {
           }
           renderItem={({item}) => (
             <>
-              {editName ? (
-                oldName == item.name && (
-                  <View style={{padding: 10, width: windowWidth}}>
-                    <AreaCard item={item} />
-                  </View>
-                )
-              ) : (
-                <View style={{padding: 10, width: windowWidth}}>
+              <View>
+                {editName ? (
+                  oldName == item.name && <AreaCard item={item} />
+                ) : (
                   <AreaCard item={item} />
-                </View>
-              )}
+                )}
+              </View>
             </>
           )}
         />
       )}
+      {/* ---------------------- Add new area name and edit name button */}
+      {(addArea || editName) && <AreaCreateAndEditModal />}
     </Dialog>
   );
 };
@@ -120,6 +160,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
+    paddingBottom: 23,
     // width: '100%',
   },
   dialofCloseBotton: {
@@ -143,7 +184,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   dialogHeaderText: {
-    fontSize: 17,
+    fontSize: 20,
     fontWeight: '800',
     color: '#000',
   },

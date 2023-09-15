@@ -1,12 +1,5 @@
 import React, {PropsWithChildren, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Dimensions,
-  Alert,
-  Platform,
-} from 'react-native';
+import {StyleSheet, View, Dimensions, Alert} from 'react-native';
 import {Pressable, Text} from '../../../components/ApplicationUILib';
 
 import {IconButton, Card} from 'react-native-paper';
@@ -167,7 +160,6 @@ const styles = StyleSheet.create({
   },
   areaNameText: {
     fontSize: 18,
-    fontWeight: '700',
     color: '#000',
     paddingVertical: 1,
     paddingHorizontal: 5,

@@ -41,7 +41,7 @@ const AreaList = () => {
         setOldName('');
       }}
       width={windowWidth}
-      height="60%"
+      height="70%"
       bottom={true}
       overlayBackgroundColor="transparent"
       containerStyle={styles.dialogContainer}
@@ -108,7 +108,7 @@ const AreaList = () => {
                     setOpenBottomSheet(false);
                   }}>
                   <Icon name="plus" size={20} color="#fff" />
-                  <Text style={styles.dialogAddButtonText}>Add</Text>
+                  <Text style={styles.dialogAddButtonText}> Add</Text>
                 </Pressable>
               </>
             )}
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   dialogHeaderText: {
+    // fontFamily: 'Montserrat-ExtraBold',
     fontSize: 20,
-    fontWeight: '800',
     color: '#000',
   },
   dialogAddButton: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   dialogAddButtonText: {
     color: '#fff',
     fontSize: 17,
-    fontWeight: '800',
+
     paddingHorizontal: 4,
   },
   noSavedAreaText: {

@@ -73,6 +73,7 @@ const LayerTypeSelector = () => {
               ]}>
               <Text
                 style={{
+                  fontFamily: 'Montserrat-Light',
                   fontSize: 15,
                   color: mapType == layer ? 'green' : 'grey',
                 }}>
@@ -118,8 +119,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   dialogContentHeaderText: {
-    fontSize: 17,
-    fontWeight: '800',
+    fontSize: 19,
     color: '#000',
   },
   pressableSelectorsView: {

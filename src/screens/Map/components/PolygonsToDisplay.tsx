@@ -1,10 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useMemo} from 'react';
+import {View} from 'react-native';
+import {Text} from '../../../components/ApplicationUILib';
+import React from 'react';
 import {useMapContext} from '../MapContext';
-import MapView, {Marker, Polygon, Polyline} from 'react-native-maps';
+import {Marker, Polygon} from 'react-native-maps';
+import {centerCoordOfPolygon} from '../../../utils/map';
 
 const PolygonsToDisplay = () => {
-  const {areaToDisplay, centerCoordOfPolygon} = useMapContext();
+  const {areaToDisplay} = useMapContext();
 
   return areaToDisplay?.map((area, index) => {
     const center = centerCoordOfPolygon(area.coordinates);
@@ -28,8 +30,7 @@ const PolygonsToDisplay = () => {
             <Text
               style={{
                 color: 'white',
-
-                fontSize: 18,
+                fontSize: 16,
               }}>
               {' ' + area.name + ' '}
             </Text>

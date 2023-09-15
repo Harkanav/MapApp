@@ -5,7 +5,7 @@ import {useRef, useState} from 'react';
 const useMap = () => {
   // console.log('in usemap context');
   const [onPressCoordinates, setOnPressCoordinates] = useState<
-    onPressCoordinates[] | []
+    coordinates[] | []
   >([]);
 
   const [drawPolygon, setDrawPolygon] = useState<boolean>(false);
@@ -14,7 +14,6 @@ const useMap = () => {
     useState<boolean>(false); //  For layer bottomsheet
 
   const [allAreas, setAllAreas] = useState<areaDetails[] | []>([]);
-
   const [areaToDisplay, setAreaToDisplay] = useState<areaDetails[] | []>([]);
   const [showNameModal, setShowNameModal] = useState<boolean>(false);
   const [addArea, setAddArea] = useState<boolean>(false);
@@ -26,48 +25,7 @@ const useMap = () => {
   const [oldName, setOldName] = useState<string>('');
   const mapViewRef = useRef<any>(null);
   const [mapType, setMapType] = useState<layerType>('standard');
-
-  // ----------------------------------------------- Center coordinates of the polygon
-
-  const centerCoordOfPolygon = (
-    coordinates: onPressCoordinates[],
-  ): onPressCoordinates => {
-    // console.log(coordinates[0]);
-    const points = coordinates?.map((coordinate: any) => ({
-      latitude: coordinate.latitude,
-      longitude: coordinate.longitude,
-    }));
-    var first = points[0],
-      last = points[points.length - 1];
-    if (
-      first.latitude !== last.latitude ||
-      first.longitude !== last.longitude
-    ) {
-      points.push(first);
-    }
-    var twiceArea = 0,
-      x = 0,
-      y = 0,
-      nPts = points.length,
-      p1,
-      p2,
-      f;
-    for (var i = 0, j = nPts - 1; i < nPts; j = i++) {
-      p1 = points[i];
-      p2 = points[j];
-      f =
-        (p1.longitude - first.longitude) * (p2.latitude - first.latitude) -
-        (p2.longitude - first.longitude) * (p1.latitude - first.latitude);
-      twiceArea += f;
-      x += (p1.latitude + p2.latitude - 2 * first.latitude) * f;
-      y += (p1.longitude + p2.longitude - 2 * first.longitude) * f;
-    }
-    f = twiceArea * 3;
-    return {
-      latitude: x / f + first.latitude,
-      longitude: y / f + first.longitude,
-    };
-  };
+  const [showLiveLocation, setShowLiveLocation] = useState<boolean>(false);
 
   const wordToUppercase = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -95,7 +53,6 @@ const useMap = () => {
     oldName,
     setOldName,
     mapViewRef,
-    centerCoordOfPolygon,
     openLayerBottomSheet,
     setOpenLayerBottomSheet,
     mapType,
@@ -103,6 +60,8 @@ const useMap = () => {
     wordToUppercase,
     addArea,
     setAddArea,
+    showLiveLocation,
+    setShowLiveLocation,
   };
 };
 

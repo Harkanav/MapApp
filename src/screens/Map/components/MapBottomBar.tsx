@@ -1,8 +1,9 @@
-import {Platform, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Platform, ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
-import {Pressable} from '../../../components/ApplicationUILib';
+import {Text, Pressable} from '../../../components/ApplicationUILib';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useMapContext} from '../MapContext';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const MapBottomBar = () => {
   const {
@@ -12,12 +13,22 @@ const MapBottomBar = () => {
     setShowAllPolygons,
     setOpenLayerBottomSheet,
   } = useMapContext();
+
+  // insets is for detecting the iOS devices with button below screen.
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.bottomBar}>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.itemContainer}>
+        contentContainerStyle={[
+          styles.itemContainer,
+          {
+            paddingBottom:
+              Platform.OS == 'ios' ? (insets.bottom > 0 ? 30 : 10) : 10,
+          },
+        ]}>
         <Pressable
           style={styles.bottomBarItem}
           onPress={() => {
@@ -56,8 +67,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     paddingHorizontal: 16,
-    paddingVertical: 10,
-    paddingBottom: Platform.OS == 'ios' ? 30 : 10,
+    paddingTop: 10,
   },
   bottomBarItem: {
     marginHorizontal: 22,

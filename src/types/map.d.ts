@@ -1,11 +1,11 @@
-type onPressCoordinates = {
+type coordinates = {
   latitude: number;
   longitude: number;
 };
 
 interface areaDetails {
   name: string; // Unique
-  coordinates: onPressCoordinates[];
+  coordinates: coordinates[];
   totalArea: number;
 }
 

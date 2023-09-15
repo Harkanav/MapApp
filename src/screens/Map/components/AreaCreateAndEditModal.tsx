@@ -4,12 +4,14 @@ import {
   useWindowDimensions,
   TextInput,
   Alert,
+  Platform,
 } from 'react-native';
 import React from 'react';
 import {Pressable, Text} from '../../../components/ApplicationUILib';
 import {useMapContext} from '../MapContext';
 import {computeArea, LatLng} from 'spherical-geometry-js/src/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const AreaCreateAndEditModal = () => {
   const {width: windowWidth, height: windowHeight} = useWindowDimensions();
@@ -138,12 +140,15 @@ const AreaCreateAndEditModal = () => {
     // setClearAllPolygons(true);
     // setAllAreas();
   };
-
+  // insets is for detecting the iOS devices with button below screen.
+  const insets = useSafeAreaInsets();
   return (
     <>
       <View
         style={{
           paddingTop: 10,
+          paddingBottom:
+            Platform.OS === 'ios' ? (insets.bottom > 0 ? 18 : 4) : 4,
           width: windowWidth,
           flex: 1,
           alignItems: 'center',
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
   cardTextInput: {
     // width: '100%',
     fontSize: 18,
-    fontWeight: '700',
+    fontFamily: 'Montserrat-SemiBold',
     color: '#333',
     borderWidth: 0.5,
     borderColor: 'grey',

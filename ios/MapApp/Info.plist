@@ -36,11 +36,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>The app is using you location right now and will always use it unless you turn it off from the back.</string>
+	<string>NSLocationAlwaysAndWhenInUseUsageDescription.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>The app is using you location all the time.</string>
+	<string>The app will use you location and will not ask again.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>You location is being used by the app at the moment.</string>
+	<string>Allow MapApp to use the realtime location.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -64,10 +64,10 @@
 		<string>Fontisto.ttf</string>
 		<string>Montserrat-Black.ttf</string>
 		<string>Montserrat-BlackItalic.ttf</string>
-		<string>Montserrat-Bold.ttf</string>
 		<string>Montserrat-BoldItalic.ttf</string>
 		<string>Montserrat-ExtraBold.ttf</string>
 		<string>Montserrat-ExtraBoldItalic.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
 		<string>Montserrat-ExtraLight.ttf</string>
 		<string>Montserrat-ExtraLightItalic.ttf</string>
 		<string>Montserrat-Italic.ttf</string>

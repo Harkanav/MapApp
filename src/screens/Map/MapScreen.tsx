@@ -1,11 +1,5 @@
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  StatusBar,
-  useWindowDimensions,
-} from 'react-native';
-import React, {useMemo, useEffect} from 'react';
+import {Dimensions, StyleSheet, View, Image, AppState} from 'react-native';
+import React, {useEffect, useRef} from 'react';
 import MapView, {
   Marker,
   Polygon,
@@ -20,6 +14,12 @@ import AllIcons from './components/AllIcons';
 import PolygonsToDisplay from './components/PolygonsToDisplay';
 import MapBottomBar from './components/MapBottomBar';
 import LayerTypeSelector from './components/LayerTypeSelector';
+import {useAppLocationContext} from './../../hooks/useLocation';
+import {useAppPermissionscontext} from './../../hooks/useAppPermissions';
+import {onRegionChange} from '../../utils/map';
+
+// import LiveLocation from './components/LiveLocation';
+// import DeviceInfo from 'react-native-device-info';
 
 // type MapScreenProps = NativeStackScreenProps<RootStackParamList, 'MapScreen'>;
 const {width} = Dimensions.get('window');
@@ -34,20 +34,33 @@ const MapScreen = () => {
     setOnPressCoordinates,
     drawPolygon,
     setAllAreas,
-    areaToDisplay,
     mapViewRef,
-    centerCoordOfPolygon,
     setAreaToDisplay,
     allAreas,
     showAllPolygons,
     mapType,
+    showLiveLocation,
   } = useMapContext();
+
+  const {permissions, checkLocationPermissions, requestLocationPermission} =
+    useAppPermissionscontext();
+
+  const {getCurrentPosition, currentLocationCoord, setCurrentLocationCoord} =
+    useAppLocationContext();
+
+  const appState = useRef(AppState.currentState);
 
   // ----------------------------------------^ Variables declated
 
   // console.log(onPressCoordinates);
 
   useEffect(() => {
+    checkLocationPermissions().then(() => {
+      if (!permissions.location) {
+        requestLocationPermission();
+      }
+    });
+
     const retreiveData = async () => {
       const allData = await AsyncStorage.getItem('allAreas');
       const allDataArray = allData && JSON.parse(allData);
@@ -59,39 +72,6 @@ const MapScreen = () => {
     };
     retreiveData();
   }, []);
-
-  const onRegionChange = (region: any) => {
-    let lat_min = region.latitude - region.latitudeDelta / 2;
-    let lat_max = region.latitude + region.latitudeDelta / 2;
-
-    let lng_min = region.longitude - region.longitudeDelta / 2;
-    let lng_max = region.longitude + region.longitudeDelta / 2;
-
-    let areaToDisplayTemporary = allAreas.slice();
-    allAreas?.map(area => {
-      const centerlatlong = centerCoordOfPolygon(area.coordinates);
-      if (
-        centerlatlong?.latitude >= lat_min &&
-        centerlatlong?.latitude <= lat_max &&
-        centerlatlong?.longitude >= lng_min &&
-        centerlatlong?.longitude <= lng_max
-      ) {
-        if (areaToDisplayTemporary.findIndex(a => a.name == area.name) < 0) {
-          areaToDisplayTemporary.push(area);
-        }
-      } else {
-        if (areaToDisplayTemporary.findIndex(a => a.name == area.name) > -1) {
-          areaToDisplayTemporary = areaToDisplayTemporary.filter(
-            a => a.name != area.name,
-          );
-        }
-      }
-    });
-    setAreaToDisplay(areaToDisplayTemporary);
-    // console.log('93');
-  };
-
-  // console.log(onPressCoordinates);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -110,20 +90,19 @@ const MapScreen = () => {
           showsCompass={false}
           style={styles.mapWindows}
           provider={PROVIDER_GOOGLE}
-          onRegionChangeComplete={showAllPolygons && onRegionChange}
+          onRegionChangeComplete={region =>
+            showAllPolygons &&
+            setAreaToDisplay(onRegionChange(region, allAreas))
+          }
           mapType={mapType}
           // getMapBoundaries={async ()=> await console.log(boundaries)}
           // onRegionChange={onRegionChange}
           // onRegionChangeComplete={async val => {
           //   console.log(await mapViewRef.current.getMapBoundaries());
           // }}
-          region={{
-            latitude: 30.728383092394722,
-            longitude: 76.77813406804023,
-            latitudeDelta: 0.09,
-            longitudeDelta: 0.09,
-          }}
+          region={currentLocationCoord}
           onPress={data => {
+            console.log(data.nativeEvent);
             drawPolygon &&
               setOnPressCoordinates([
                 ...onPressCoordinates,
@@ -152,6 +131,27 @@ const MapScreen = () => {
               <View style={styles.markerCircle} />
             </Marker>
           ))}
+
+          {showLiveLocation && currentLocationCoord && (
+            <Marker
+              key={
+                'currentLocationCoord' +
+                currentLocationCoord?.latitude +
+                currentLocationCoord?.longitude
+              }
+              coordinate={currentLocationCoord}
+              anchor={{x: 0.5, y: 0.5}}>
+              {/* <View style={styles.markerCircle} /> */}
+              <Image
+                source={require('../../../assets/images/dot.gif')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  alignSelf: 'center',
+                }}
+              />
+            </Marker>
+          )}
 
           {/* -------------- Display all polygons */}
           <PolygonsToDisplay />

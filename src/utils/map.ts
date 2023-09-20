@@ -217,8 +217,7 @@ export const getMelissaData = async (address: string) => {
     ff: melissa_address,
     cols: 'GrpPrimaryOwner',
   };
-  console.log(googleMapApiKey, 221);
-  console.log(melissaApiKey, 222);
+  // console.log(params, 229);
 
   try {
     const {data} = await axios.get(baseUrl, {params});

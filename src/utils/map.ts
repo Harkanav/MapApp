@@ -3,9 +3,8 @@ import axios from 'axios';
 import {get, capitalize} from 'lodash';
 
 export const googleMapApiKey = Config.GOOGLE_MAPS_API_KEY;
-// export const melissaApiKey = Config.MELISSA_API_KEY;
+export const melissaApiKey = Config.MELISSA_API_KEY;
 
-export const melissaApiKey = 'XUQANNEKUjHBap8RPzcNAD**%';
 // ----------------------------------------------- Center coordinates of the polygon
 export const centerCoordOfPolygon = (
   coordinates: coordinates[],
@@ -218,7 +217,8 @@ export const getMelissaData = async (address: string) => {
     ff: melissa_address,
     cols: 'GrpPrimaryOwner',
   };
-  // console.log(params, 229);
+  console.log(googleMapApiKey, 221);
+  console.log(melissaApiKey, 222);
 
   try {
     const {data} = await axios.get(baseUrl, {params});

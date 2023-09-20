@@ -30,15 +30,7 @@ const AllIcons = () => {
   const {currentLocationCoord, getCurrentPosition, setCurrentLocationCoord} =
     useAppLocationContext();
 
-  // useEffect(() => {
-  //   if (permissions?.location) {
-  //     handleEnableMyLocation();
-  //   }
-  // }, [permissions?.location]);
-
   const getLivePosition = () => {
-    console.log('in getLivePosition');
-
     getCurrentPosition((region: coordinates) => {
       if (mapViewRef?.current) {
         const modifyRegion = {
@@ -56,7 +48,7 @@ const AllIcons = () => {
 
   const handleEnableMyLocation = async () => {
     let locationPermissions = await checkLocationPermissions();
-    console.log(locationPermissions, 64);
+    // console.log(locationPermissions, 64);
 
     if (locationPermissions.permissionLocation) {
       getLivePosition();
@@ -64,11 +56,11 @@ const AllIcons = () => {
     } else {
       if (Platform.OS === 'ios' && locationPermissions.permissionRequest) {
         locationPermissions = await requestLocationPermission();
-        console.log(locationPermissions, 71);
+        // console.log(locationPermissions, 71);
 
         if (locationPermissions.permissionLocation) getLivePosition();
       } else {
-        console.log('in else part of handleEnableMyLocation');
+        // console.log('in else part of handleEnableMyLocation');
         setShowLiveLocation(false);
         Alert.alert(
           'Location is disable from the settings.',
@@ -199,12 +191,6 @@ const styles = StyleSheet.create({
   },
   styleButton: {
     marginBottom: 10,
-    zIndex: 1,
-  },
-  clearAllPolygons: {
-    position: 'absolute',
-    top: 0,
-    right: 50,
     zIndex: 1,
   },
 });

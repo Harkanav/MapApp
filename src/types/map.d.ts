@@ -9,4 +9,11 @@ interface areaDetails {
   totalArea: number;
 }
 
+type latLongMaxMin = {
+  lat_min: number;
+  lat_max: number;
+  lng_min: number;
+  lng_max: number;
+};
+
 type layerType = 'satellite' | 'hybrid' | 'standard' | 'terrain';

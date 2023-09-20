@@ -1,34 +1,22 @@
-import {StyleSheet, View, useWindowDimensions, FlatList} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import {StyleSheet, View} from 'react-native';
+import React from 'react';
 import {useMapContext} from '../MapContext';
-import AreaCard from './AreaCard';
 import {Dialog, Pressable, Text} from '../../../components/ApplicationUILib';
-// import {IconButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-// interface layersTypes {
-//   layer: ['standard', 'satellite', 'hybrid', 'terrain'];
-// }
+import {capitalize} from 'lodash';
+import {SCREEN_WIDTH} from '../../../utils/constants';
 
 const LayerTypeSelector = () => {
   const layers: layerType[] = ['standard', 'satellite', 'hybrid', 'terrain'];
 
-  const {
-    setOpenLayerBottomSheet,
-    openLayerBottomSheet,
-    mapType,
-    setMapType,
-    wordToUppercase,
-  } = useMapContext();
-  const {width: windowWidth} = useWindowDimensions();
-
-  // console.log('openLayerBottomSheet');
+  const {setOpenLayerBottomSheet, openLayerBottomSheet, mapType, setMapType} =
+    useMapContext();
 
   return (
     <Dialog
       visible={openLayerBottomSheet}
       onDismiss={() => setOpenLayerBottomSheet(false)}
-      width={windowWidth}
+      width={SCREEN_WIDTH}
       height="70%"
       bottom={true}
       overlayBackgroundColor="transparent"
@@ -56,7 +44,7 @@ const LayerTypeSelector = () => {
         {layers?.map((layer, index) => (
           <Pressable
             // onPress={() => handleOnPressCard(item)}
-            style={{width: windowWidth, alignItems: 'center'}}
+            style={{width: SCREEN_WIDTH, alignItems: 'center'}}
             key={index}
             onPress={() => {
               mapType != layer && setMapType(layer);
@@ -68,7 +56,7 @@ const LayerTypeSelector = () => {
                 {
                   borderWidth: mapType == layer ? 1.5 : 1,
                   borderColor: mapType == layer ? 'green' : 'grey',
-                  width: (windowWidth * 95) / 100,
+                  width: (SCREEN_WIDTH * 95) / 100,
                 },
               ]}>
               <Text
@@ -77,7 +65,7 @@ const LayerTypeSelector = () => {
                   fontSize: 15,
                   color: mapType == layer ? 'green' : 'grey',
                 }}>
-                {wordToUppercase(layer)}
+                {capitalize(layer)}
               </Text>
             </View>
           </Pressable>

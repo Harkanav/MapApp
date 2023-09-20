@@ -1,16 +1,8 @@
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  useWindowDimensions,
-  FlatList,
-  ScrollView,
-} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import {StyleSheet, View, useWindowDimensions, FlatList} from 'react-native';
+import React from 'react';
 import {useMapContext} from '../MapContext';
 import AreaCard from './AreaCard';
 import {Dialog, Pressable, Text} from '../../../components/ApplicationUILib';
-// import {IconButton} from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AreaCreateAndEditModal from './AreaCreateAndEditModal';
@@ -28,17 +20,23 @@ const AreaList = () => {
     setEditName,
     setAreaName,
     setOldName,
+    showHomeOwnerCard,
+    showJobDetailsCard,
+    setShowHomeOwnerCard,
+    setShowJobDetailsCard,
+    drawPolygon,
+    setCustomMarker,
   } = useMapContext();
   const {width: windowWidth, height: windowHeight} = useWindowDimensions();
   return (
     <Dialog
       visible={openBottomSheet}
       onDismiss={() => {
-        setOpenBottomSheet(false);
         addArea && setAddArea(false);
         editName && setEditName(false);
         setAreaName('');
         setOldName('');
+        setOpenBottomSheet(false);
       }}
       width={windowWidth}
       height="70%"
@@ -53,7 +51,13 @@ const AreaList = () => {
             }}>
             <Pressable
               style={styles.dialofCloseBotton}
-              onPress={() => setOpenBottomSheet(false)}>
+              onPress={() => {
+                setOpenBottomSheet(false);
+                addArea && setAddArea(false);
+                editName && setEditName(false);
+                // setAreaName('');
+                // setOldName('');
+              }}>
               <Icon name="chevron-down" size={13} color="gray" />
             </Pressable>
           </View>
@@ -104,11 +108,13 @@ const AreaList = () => {
                 <Pressable
                   style={styles.dialogAddButton}
                   onPress={() => {
-                    setDrawPolygon(true);
+                    showHomeOwnerCard && setShowHomeOwnerCard(false);
+                    showJobDetailsCard && setShowJobDetailsCard(false);
                     setOpenBottomSheet(false);
+                    setDrawPolygon(true);
                   }}>
                   <Icon name="plus" size={20} color="#fff" />
-                  <Text style={styles.dialogAddButtonText}> Add</Text>
+                  <Text style={styles.dialogAddButtonText}> Draw</Text>
                 </Pressable>
               </>
             )}

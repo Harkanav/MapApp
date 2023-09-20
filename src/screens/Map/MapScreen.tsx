@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet, View, Image, AppState} from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import React, {useEffect} from 'react';
 import MapView, {
   Marker,
   Polygon,
@@ -17,14 +17,8 @@ import LayerTypeSelector from './components/LayerTypeSelector';
 import {useAppLocationContext} from './../../hooks/useLocation';
 import {useAppPermissionscontext} from './../../hooks/useAppPermissions';
 import {onRegionChange} from '../../utils/map';
-
-// import LiveLocation from './components/LiveLocation';
-// import DeviceInfo from 'react-native-device-info';
-
-// type MapScreenProps = NativeStackScreenProps<RootStackParamList, 'MapScreen'>;
-const {width} = Dimensions.get('window');
-// const {height} = Dimensions.get('window');
-// const {width} = Dimensions.get('window');
+import HomeOwnerCard from './components/HomeOwnerCard';
+import {SCREEN_WIDTH} from '../../utils/constants';
 
 const MapScreen = () => {
   // ------------------------------------ Variables Declared
@@ -40,15 +34,19 @@ const MapScreen = () => {
     showAllPolygons,
     mapType,
     showLiveLocation,
+    showHomeOwnerCard,
+    setShowHomeOwnerCard,
+    setOnRegionChangeValues,
+    customMarker,
+    setCustomMarker,
+    setIsMapMove,
+    showJobDetailsCard,
   } = useMapContext();
 
   const {permissions, checkLocationPermissions, requestLocationPermission} =
     useAppPermissionscontext();
 
-  const {getCurrentPosition, currentLocationCoord, setCurrentLocationCoord} =
-    useAppLocationContext();
-
-  const appState = useRef(AppState.currentState);
+  const {currentLocationCoord} = useAppLocationContext();
 
   // ----------------------------------------^ Variables declated
 
@@ -73,6 +71,24 @@ const MapScreen = () => {
     retreiveData();
   }, []);
 
+  const handlePress = (data: any) => {
+    // console.log(data.nativeEvent);
+    if (drawPolygon) {
+      setOnPressCoordinates([
+        ...onPressCoordinates,
+        data.nativeEvent.coordinate,
+      ]);
+    } else {
+      setCustomMarker({
+        latitude: data?.nativeEvent?.coordinate?.latitude,
+        longitude: data?.nativeEvent?.coordinate?.longitude,
+      });
+
+      // showJobDetailsCard && setShowJobDetailsCard(false);
+      setShowHomeOwnerCard(true);
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View
@@ -90,10 +106,11 @@ const MapScreen = () => {
           showsCompass={false}
           style={styles.mapWindows}
           provider={PROVIDER_GOOGLE}
-          onRegionChangeComplete={region =>
+          onRegionChangeComplete={region => {
+            setOnRegionChangeValues(region);
             showAllPolygons &&
-            setAreaToDisplay(onRegionChange(region, allAreas))
-          }
+              setAreaToDisplay(onRegionChange(region, allAreas));
+          }}
           mapType={mapType}
           // getMapBoundaries={async ()=> await console.log(boundaries)}
           // onRegionChange={onRegionChange}
@@ -101,13 +118,9 @@ const MapScreen = () => {
           //   console.log(await mapViewRef.current.getMapBoundaries());
           // }}
           region={currentLocationCoord}
-          onPress={data => {
-            console.log(data.nativeEvent);
-            drawPolygon &&
-              setOnPressCoordinates([
-                ...onPressCoordinates,
-                data.nativeEvent.coordinate,
-              ]);
+          onPress={handlePress}
+          onTouchMove={() => {
+            showHomeOwnerCard && setIsMapMove(showHomeOwnerCard);
           }}>
           {onPressCoordinates?.length > 0 && (
             <>
@@ -143,10 +156,32 @@ const MapScreen = () => {
               anchor={{x: 0.5, y: 0.5}}>
               {/* <View style={styles.markerCircle} /> */}
               <Image
-                source={require('../../../assets/images/dot.gif')}
+                source={require('../../../assets/images/pulse_dot.gif')}
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 23,
+                  height: 23,
+                  alignSelf: 'center',
+                }}
+              />
+            </Marker>
+          )}
+
+          {(showHomeOwnerCard || showJobDetailsCard) && (
+            <Marker
+              key={
+                'customMarker' +
+                customMarker?.latitude +
+                customMarker?.longitude
+              }
+              // tracksViewChanges={false}
+              coordinate={customMarker}
+              style={{zIndex: 99}}
+              anchor={{x: 0.5, y: 1.1}}>
+              <Image
+                source={require('../../../assets/images/locationIcon.png')}
+                style={{
+                  width: 30,
+                  height: 35,
                   alignSelf: 'center',
                 }}
               />
@@ -156,6 +191,11 @@ const MapScreen = () => {
           {/* -------------- Display all polygons */}
           <PolygonsToDisplay />
         </MapView>
+
+        {/* -------------- HomeOwner Card*/}
+        {showHomeOwnerCard && <HomeOwnerCard />}
+        {/* {showJobDetailsCard && <JobDetailsCard />} */}
+
         {/* ----------------------------------------------- Bottom Sheets */}
         <AreaList />
         <LayerTypeSelector />
@@ -172,7 +212,7 @@ export default MapScreen;
 const styles = StyleSheet.create({
   mapWindows: {
     ...StyleSheet.absoluteFillObject,
-    width: width,
+    width: SCREEN_WIDTH,
     // width: width,
     // height: height,
   },

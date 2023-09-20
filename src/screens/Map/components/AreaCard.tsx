@@ -1,16 +1,13 @@
-import React, {PropsWithChildren, useRef} from 'react';
-import {StyleSheet, View, Dimensions, Alert} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Alert} from 'react-native';
 import {Pressable, Text} from '../../../components/ApplicationUILib';
 
-import {IconButton, Card} from 'react-native-paper';
 import {useMapContext} from '../MapContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// type AreaCardProps = NativeStackScreenProps<RootStackParamList, 'AreaCard'>;
-const {width} = Dimensions.get('window');
-const {height} = Dimensions.get('window');
+import {centerCoordOfPolygon} from '../../../utils/map';
+import {SCREEN_WIDTH} from '../../../utils/constants';
 
 interface AreaCardProps {
   item: areaDetails | undefined;
@@ -20,7 +17,6 @@ const AreaCard = ({item}: AreaCardProps) => {
   const {
     setDrawPolygon,
     setOpenBottomSheet,
-    centerCoordOfPolygon,
     mapViewRef,
     setShowAllPolygons,
     areaToDisplay,
@@ -150,7 +146,7 @@ const styles = StyleSheet.create({
   areaCardView: {
     borderWidth: 1,
     borderColor: 'lightgrey',
-    width: (width * 95) / 100,
+    width: (SCREEN_WIDTH * 95) / 100,
     paddingVertical: 14,
     padding: 10,
     justifyContent: 'space-between',

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import {useCallback, useState} from 'react';
 import constate from 'constate';
 import {LATITUDE_DELTA, LONGITUDE_DELTA} from '../utils/constants';
 import Geolocation from 'react-native-geolocation-service';
@@ -19,19 +19,14 @@ const useLocation = () => {
 
   const getCurrentPosition = useCallback(
     (cb: any = () => {}, cb2 = () => {}) => {
-      // console.log('in getCurrentPosition', 23);
-      // console.log(permissions.location);
       if (permissions.location) {
-        // console.log(Geolocation, 25);
         Geolocation.getCurrentPosition(
           position => {
             // ------------------ All information of live location.
-            // console.log(position);
             const region = {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             };
-            // console.log('getCurrentPosition');
             cb(region);
           },
           error => {
@@ -47,38 +42,10 @@ const useLocation = () => {
     [permissions],
   );
 
-  // const watchCurrentPosition = useCallback(
-  //   (cb: any = () => {}) => {
-  //     if (permissions?.location) {
-  //       Geolocation.watchPosition(
-  //         position => {
-  //           // ------------------ All information of live location.
-  //           // console.log(position);
-  //           const region = {
-  //             latitude: position.coords.latitude,
-  //             longitude: position.coords.longitude,
-  //           };
-
-  //           cb(region);
-  //         },
-  //         error => {
-  //           // See error code charts below.
-  //           console.log(45, error.code, error.message);
-  //         },
-  //         {enableHighAccuracy: true, distanceFilter: 1},
-  //       );
-  //     } else {
-  //       requestLocationPermission();
-  //     }
-  //   },
-  //   [permissions],
-  // );
-
   return {
     initialCoordinates,
     currentLocationCoord,
     setCurrentLocationCoord,
-    // watchCurrentPosition,
     getCurrentPosition,
   };
 };

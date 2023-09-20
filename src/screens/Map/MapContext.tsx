@@ -1,5 +1,6 @@
 import constate from 'constate';
 import {useRef, useState} from 'react';
+
 // import React from 'react'
 
 const useMap = () => {
@@ -26,10 +27,13 @@ const useMap = () => {
   const mapViewRef = useRef<any>(null);
   const [mapType, setMapType] = useState<layerType>('standard');
   const [showLiveLocation, setShowLiveLocation] = useState<boolean>(false);
-
-  const wordToUppercase = (word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  };
+  const [showHomeOwnerCard, setShowHomeOwnerCard] = useState(false);
+  const [customMarker, setCustomMarker] = useState<any>(null);
+  const [onRegionChangeValues, setOnRegionChangeValues] = useState<any>();
+  const [selectedMark, setSelectedMark] = useState<any>();
+  const [isMapMove, setIsMapMove] = useState(false);
+  const [showJobDetailsCard, setShowJobDetailsCard] = useState(false);
+  const [customerInfo, setcustomerInfo] = useState<any>();
 
   return {
     onPressCoordinates,
@@ -57,11 +61,25 @@ const useMap = () => {
     setOpenLayerBottomSheet,
     mapType,
     setMapType,
-    wordToUppercase,
+    // wordToUppercase,
     addArea,
     setAddArea,
     showLiveLocation,
     setShowLiveLocation,
+    showHomeOwnerCard,
+    setShowHomeOwnerCard,
+    customMarker,
+    setCustomMarker,
+    onRegionChangeValues,
+    setOnRegionChangeValues,
+    selectedMark,
+    setSelectedMark,
+    isMapMove,
+    setIsMapMove,
+    showJobDetailsCard,
+    setShowJobDetailsCard,
+    customerInfo,
+    setcustomerInfo,
   };
 };
 

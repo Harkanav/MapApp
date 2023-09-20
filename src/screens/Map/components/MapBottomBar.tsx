@@ -58,7 +58,9 @@ export default MapBottomBar;
 
 const styles = StyleSheet.create({
   bottomBar: {
+    // position: 'absolute',
     // height: 90,
+    zIndex: 999,
     backgroundColor: '#fff',
     bottom: 0,
     flexDirection: 'row',
